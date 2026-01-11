@@ -1,0 +1,41 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+from docx import Document
+from zipfile import ZipFile
+import os
+
+# Load data
+df = pd.read_csv('/mnt/data/Hotels Booking Data (1).csv')
+df.head()
+
+import matplotlib.pyplot as plt
+
+# Booking patterns by channel
+fig1 = plt.figure()
+df['channel_of_booking'].value_counts().plot(kind='bar')
+plt.title("Bookings by Channel")
+plt.tight_layout()
+fig1_path = "/mnt/data/bookings_by_channel.png"
+plt.savefig(fig1_path)
+plt.close()
+
+# Room type distribution
+fig2 = plt.figure()
+df['room_type'].value_counts().plot(kind='bar')
+plt.title("Room Type Distribution")
+plt.tight_layout()
+fig2_path = "/mnt/data/room_type_distribution.png"
+plt.savefig(fig2_path)
+plt.close()
+
+# Cancellation rate by channel
+fig3 = plt.figure()
+df.groupby('channel_of_booking')['booking_status'].apply(lambda x: (x=="Cancelled").mean()).plot(kind='bar')
+plt.title("Cancellation Rate by Channel")
+plt.tight_layout()
+fig3_path = "/mnt/data/cancellation_by_channel.png"
+plt.savefig(fig3_path)
+plt.close()
+
+(fig1_path, fig2_path, fig3_path)
+
