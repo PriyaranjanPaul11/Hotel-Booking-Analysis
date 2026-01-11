@@ -39,3 +39,86 @@ plt.close()
 
 (fig1_path, fig2_path, fig3_path)
 
+import pandas as pd
+import matplotlib.pyplot as plt
+
+df = pd.read_csv('/mnt/data/Hotels Booking Data (1).csv')
+
+# Convert dates
+date_cols = ['booking_date','check_in_date','check_out_date','travel_date']
+for c in date_cols:
+    df[c] = pd.to_datetime(df[c], errors='coerce')
+
+# Monthly booking trend
+monthly = df.groupby(df['booking_date'].dt.to_period('M')).size()
+
+fig1 = plt.figure()
+monthly.plot(kind='line', marker='o')
+plt.title("Monthly Booking Trend")
+plt.xlabel("Month")
+plt.ylabel("Bookings")
+plt.tight_layout()
+path1 = "/mnt/data/monthly_booking_trend.png"
+plt.savefig(path1)
+plt.close()
+
+# Cancellation by room type
+cancel_room = df.groupby('room_type')['booking_status'].apply(lambda x:(x=="Cancelled").mean())
+
+fig2 = plt.figure()
+cancel_room.plot(kind='bar')
+plt.title("Cancellation Rate by Room Type")
+plt.tight_layout()
+path2 = "/mnt/data/cancellation_by_room.png"
+plt.savefig(path2)
+plt.close()
+
+# Avg booking value by star rating
+fig3 = plt.figure()
+df.groupby('star_rating')['booking_amount'].mean().plot(kind='bar')
+plt.title("Avg Booking Amount by Star Rating")
+plt.tight_layout()
+path3 = "/mnt/data/avg_booking_by_star.png"
+plt.savefig(path3)
+plt.close()
+
+[path1, path2, path3]
+
+
+import pandas as pd
+
+df = pd.read_csv('/mnt/data/Hotels Booking Data (1).csv')
+df.columns
+
+
+import pandas as pd
+import matplotlib.pyplot as plt
+
+df = pd.read_csv('/mnt/data/Hotels Booking Data (1).csv')
+for c in ['booking_date','check_in_date','check_out_date','travel_date']:
+    df[c] = pd.to_datetime(df[c], errors='coerce')
+
+# Monthly bookings
+monthly = df.groupby(df['booking_date'].dt.to_period('M')).size()
+fig1 = plt.figure()
+monthly.plot(kind='line', marker='o')
+plt.title("Monthly Booking Trend")
+plt.tight_layout()
+p1="/mnt/data/monthly_booking_trend.png"; plt.savefig(p1); plt.close()
+
+# Cancellation by room type
+cancel_room = df.groupby('room_type')['booking_status'].apply(lambda x:(x=="Cancelled").mean())
+fig2 = plt.figure()
+cancel_room.plot(kind='bar')
+plt.title("Cancellation Rate by Room Type")
+plt.tight_layout()
+p2="/mnt/data/cancellation_by_room.png"; plt.savefig(p2); plt.close()
+
+# Avg selling price by star rating
+fig3 = plt.figure()
+df.groupby('star_rating')['selling_price'].mean().plot(kind='bar')
+plt.title("Avg Selling Price by Star Rating")
+plt.tight_layout()
+p3="/mnt/data/avg_price_star.png"; plt.savefig(p3); plt.close()
+
+[p1,p2,p3]
